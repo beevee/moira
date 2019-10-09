@@ -28,12 +28,27 @@ func (err ErrTriggerHasOnlyWildcards) Error() string {
 
 // ErrTriggerHasSameMetricNames used if trigger has two metric data with same name
 type ErrTriggerHasSameMetricNames struct {
-	names []string
+	duplicates map[string][]string
+}
+
+// NewErrTriggerHasSameMetricNames is a constructor function for ErrTriggerHasSameMetricNames.
+func NewErrTriggerHasSameMetricNames(duplicates map[string][]string) ErrTriggerHasSameMetricNames {
+	return ErrTriggerHasSameMetricNames{
+		duplicates: duplicates,
+	}
 }
 
 // ErrTriggerHasSameMetricNames implementation with constant error message
 func (err ErrTriggerHasSameMetricNames) Error() string {
-	return fmt.Sprintf("Several metrics have an identical name: %s", strings.Join(err.names, ", "))
+	var builder strings.Builder
+	builder.WriteString("Targets have metrics with identical name: ")
+	for target, duplicates := range err.duplicates {
+		builder.WriteString(target)
+		builder.WriteRune(':')
+		builder.WriteString(strings.Join(duplicates, ", "))
+		builder.WriteString("; ")
+	}
+	return builder.String()
 }
 
 // ErrTargetHasNoMetrics used if additional trigger target has not metrics data after fetch from source

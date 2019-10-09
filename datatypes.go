@@ -254,14 +254,15 @@ type CheckData struct {
 
 // MetricState represents metric state data for given timestamp
 type MetricState struct {
-	EventTimestamp  int64           `json:"event_timestamp"`
-	State           State           `json:"state"`
-	Suppressed      bool            `json:"suppressed"`
-	SuppressedState State           `json:"suppressed_state,omitempty"`
-	Timestamp       int64           `json:"timestamp"`
-	Value           *float64        `json:"value,omitempty"`
-	Maintenance     int64           `json:"maintenance,omitempty"`
-	MaintenanceInfo MaintenanceInfo `json:"maintenance_info"`
+	EventTimestamp  int64              `json:"event_timestamp"`
+	State           State              `json:"state"`
+	Suppressed      bool               `json:"suppressed"`
+	SuppressedState State              `json:"suppressed_state,omitempty"`
+	Timestamp       int64              `json:"timestamp"`
+	Values          map[string]float64 `json:"value,omitempty"`
+	Maintenance     int64              `json:"maintenance,omitempty"`
+	MaintenanceInfo MaintenanceInfo    `json:"maintenance_info"`
+	// AloneMetrics    map[string]string  `json:"alone_metrics"` // represents a relation between name of alone metrics and their targets
 }
 
 // SetMaintenance set maintenance user, time for MetricState
